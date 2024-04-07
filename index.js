@@ -6,9 +6,12 @@ const axios = require('axios');
 
 const app = new Koa();
 const router = new KoaRouter();
+const secret = process.env.GITALK_TOKEN
 
 router.post('/github_access_token', async (ctx, next) => {
   const reqBody = ctx.request.body;
+  reqBody.client_secret = secret;
+  console.log(reqBody);
   const res = await axios.post('https://github.com/login/oauth/access_token', reqBody);
   const params = new URLSearchParams(res.data);
   ctx.body = Array.from(params.entries()).reduce((obj, [key, value]) => {
